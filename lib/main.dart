@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:snapmotion/routes/routes.dart';
+import 'package:snapmotion/routes/routes_name.dart';
 
 import 'model-view/video_viewmodel.dart';
 
@@ -24,6 +26,8 @@ class MyApp extends StatelessWidget {
               backgroundColor: Colors.deepOrange,
               centerTitle: true,
             )),
+        initialRoute: RoutesName.homeView,
+        onGenerateRoute: Routes.generatedRoutes,
       ),
     );
   }
