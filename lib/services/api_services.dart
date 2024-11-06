@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:snapmotion/utils/links.dart';
 
 import '../model/video_model.dart';
 
@@ -8,9 +9,9 @@ import '../model/video_model.dart';
 class ApiService {
   Future<VideoModel?> uploadImage(File imageFile) async {
     try {
-      final url = Uri.parse("https://api.stability.ai/v2beta/image-to-video");
+      final url = Uri.parse(Links.endPoint);
       var request = http.MultipartRequest('POST', url)
-        ..headers['authorization'] = 'Bearer '
+        ..headers['authorization'] = 'Bearer ${Link}'
         ..fields['seed'] = '0'
         ..fields['cfg_scale'] = '1.8'
         ..fields['motion_bucket_id'] = '127'
