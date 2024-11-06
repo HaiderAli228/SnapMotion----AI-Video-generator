@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
+import 'package:snapmotion/utils/app_color.dart';
 
 import '../model-view/video_viewmodel.dart';
 
 class HomeView extends StatefulWidget {
-  const HomeView({super.key});
+  const HomeView({Key? key}) : super(key: key);
 
   @override
   HomeViewState createState() => HomeViewState();
@@ -45,7 +46,8 @@ class HomeViewState extends State<HomeView> {
     await viewModel.generateVideoFromImage(_selectedImage!);
 
     if (viewModel.video != null) {
-      Fluttertoast.showToast(msg: "Video generated successfully!");
+      Fluttertoast.showToast(
+          msg: "Video generated successfully! ID: ${viewModel.video}");
     } else {
       Fluttertoast.showToast(msg: "Failed to generate video.");
     }
@@ -57,6 +59,8 @@ class HomeViewState extends State<HomeView> {
 
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
+        backgroundColor: AppColor.themeColor,
         title: const Text("Image to Video Generator"),
       ),
       body: Padding(

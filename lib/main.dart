@@ -18,14 +18,11 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => VideoViewModel()),
       ],
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(
             fontFamily: "Poppins",
             primaryColor: Colors.deepOrange,
-            appBarTheme: AppBarTheme(
-              color: Colors.white,
-              backgroundColor: Colors.deepOrange,
-              centerTitle: true,
-            )),
+        ),
         initialRoute: RoutesName.homeView,
         onGenerateRoute: Routes.generatedRoutes,
       ),

@@ -1,20 +1,18 @@
 import 'dart:io';
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 
 import '../model/video_model.dart';
-import '../services/api_services.dart';
-
 
 class VideoViewModel extends ChangeNotifier {
-  final ApiService _apiService = ApiService();
-  VideoModel? video;
+  final VideoModel _videoModel = VideoModel();
+  String? video;
   bool isLoading = false;
 
   Future<void> generateVideoFromImage(File imageFile) async {
     isLoading = true;
     notifyListeners();
 
-    video = await _apiService.uploadImage(imageFile);
+    video = await _videoModel.uploadImageForVideo(imageFile);
 
     isLoading = false;
     notifyListeners();
