@@ -4,6 +4,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:snapmotion/utils/app_color.dart';
+import 'package:snapmotion/view/video_result_view.dart';
 
 import '../model-view/video_viewmodel.dart';
 
@@ -46,8 +47,15 @@ class HomeViewState extends State<HomeView> {
     await viewModel.generateVideoFromImage(_selectedImage!);
 
     if (viewModel.video != null) {
-      Fluttertoast.showToast(
-          msg: "Video generated successfully! ID: ${viewModel.video}");
+      Fluttertoast.showToast(msg: "Video generated successfully!");
+
+      // Navigate to the VideoResultScreen and pass the video ID
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => VideoResultScreen(videoId: viewModel.video!),
+        ),
+      );
     } else {
       Fluttertoast.showToast(msg: "Failed to generate video.");
     }
@@ -94,7 +102,7 @@ class HomeViewState extends State<HomeView> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   InkWell(
-                      onTap: () => _captureImage,
+                      onTap: _captureImage,
                       child: Container(
                         height: 50,
                         width: 50,
