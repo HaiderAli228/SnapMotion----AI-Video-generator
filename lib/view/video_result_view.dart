@@ -3,6 +3,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import '../model-view/video_viewmodel.dart';
+import 'package:dio/dio.dart';
 
 class VideoResultScreen extends StatelessWidget {
   final String videoId;
@@ -10,7 +11,8 @@ class VideoResultScreen extends StatelessWidget {
   const VideoResultScreen({super.key, required this.videoId});
 
   Future<void> _downloadVideo(String videoId) async {
-    final url = "https://yourvideourl.com/video/$videoId"; // Actual URL for the video
+    final url =
+        "https://yourvideourl.com/video/$videoId"; // Actual URL for the video
     final directory = await getApplicationDocumentsDirectory();
     final path = "${directory.path}/$videoId.mp4";
 
@@ -35,7 +37,7 @@ class VideoResultScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             if (viewModel.videoUrl != null)
-            // Display the video or a placeholder image for the video
+              // Display the video or a placeholder image for the video
               Image.network(viewModel.videoUrl!)
             else
               const CircularProgressIndicator(),
