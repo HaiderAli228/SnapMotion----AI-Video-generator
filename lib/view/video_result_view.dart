@@ -1,55 +1,78 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:provider/provider.dart';
-import '../model-view/video_viewmodel.dart';
-import 'package:dio/dio.dart';
+import 'package:video_player/video_player.dart';
 
-class VideoResultScreen extends StatelessWidget {
+class VideoResultScreen extends StatefulWidget {
+  final File videoFile;
   final String videoId;
 
-  const VideoResultScreen({super.key, required this.videoId});
+  const VideoResultScreen({super.key, required this.videoFile, required this.videoId});
 
-  Future<void> _downloadVideo(String videoId) async {
-    final url =
-        "https://yourvideourl.com/video/$videoId"; // Actual URL for the video
-    final directory = await getApplicationDocumentsDirectory();
-    final path = "${directory.path}/$videoId.mp4";
+  @override
+  _VideoResultScreenState createState() => _VideoResultScreenState();
+}
 
-    try {
-      await Dio().download(url, path);
-      Fluttertoast.showToast(msg: "Video downloaded to $path");
-    } catch (e) {
-      Fluttertoast.showToast(msg: "Download failed: $e");
-    }
+class _VideoResultScreenState extends State<VideoResultScreen> {
+  late VideoPlayerController _controller;
+  bool _isPlaying = false;
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize the VideoPlayerController with the video file
+    _controller = VideoPlayerController.file(widget.videoFile)
+      ..initialize().then((_) {
+        setState(() {});
+      });
   }
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = Provider.of<VideoViewModel>(context, listen: false);
-
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Generated Video"),
+        title: const Text("Video Result"),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            if (viewModel.videoUrl != null)
-              // Display the video or a placeholder image for the video
-              Image.network(viewModel.videoUrl!)
-            else
-              const CircularProgressIndicator(),
+            Text('Video ID: ${widget.videoId}'),
             const SizedBox(height: 20),
-            ElevatedButton.icon(
-              onPressed: () => _downloadVideo(videoId),
-              icon: const Icon(Icons.download),
-              label: const Text("Download Video"),
-            ),
+            _controller.value.isInitialized
+                ? Column(
+              children: [
+                AspectRatio(
+                  aspectRatio: _controller.value.aspectRatio,
+                  child: VideoPlayer(_controller),
+                ),
+                IconButton(
+                  icon: Icon(
+                    _isPlaying ? Icons.pause : Icons.play_arrow,
+                    size: 50,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      if (_isPlaying) {
+                        _controller.pause();
+                      } else {
+                        _controller.play();
+                      }
+                      _isPlaying = !_isPlaying;
+                    });
+                  },
+                ),
+              ],
+            )
+                : const CircularProgressIndicator(),
           ],
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
   }
 }

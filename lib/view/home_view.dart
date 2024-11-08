@@ -1,11 +1,9 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
-import 'package:snapmotion/utils/app_color.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:snapmotion/view/video_result_view.dart';
-
+import 'dart:io';
 import '../model-view/video_viewmodel.dart';
 
 class HomeView extends StatefulWidget {
@@ -46,14 +44,17 @@ class HomeViewState extends State<HomeView> {
     final viewModel = Provider.of<VideoViewModel>(context, listen: false);
     await viewModel.generateVideoFromImage(_selectedImage!);
 
-    if (viewModel.video != null) {
+    if (viewModel.videoFile != null) {
       Fluttertoast.showToast(msg: "Video generated successfully!");
 
-      // Navigate to the VideoResultScreen and pass the video ID
+      // Navigate to the VideoResultScreen and pass the video file and videoId
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => VideoResultScreen(videoId: viewModel.video!),
+          builder: (context) => VideoResultScreen(
+            videoFile: viewModel.videoFile!,
+            videoId: viewModel.videoId!,
+          ),
         ),
       );
     } else {
@@ -68,11 +69,11 @@ class HomeViewState extends State<HomeView> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        backgroundColor: AppColor.themeColor,
+        backgroundColor: Colors.deepOrange,  // Assuming AppColor.themeColor
         title: const Text(
           "Image to Video Generator",
           style: TextStyle(
-              color: AppColor.themeTextColor,
+              color: Colors.white,  // Assuming AppColor.themeTextColor
               fontFamily: "Poppins",
               fontWeight: FontWeight.bold),
         ),
@@ -107,7 +108,7 @@ class HomeViewState extends State<HomeView> {
                         height: 50,
                         width: 50,
                         decoration: const BoxDecoration(
-                            color: AppColor.themeColor,
+                            color: Colors.deepOrange,
                             borderRadius: BorderRadius.all(Radius.circular(8))),
                         alignment: Alignment.center,
                         padding: const EdgeInsets.all(4),
@@ -115,59 +116,57 @@ class HomeViewState extends State<HomeView> {
                         child: const Icon(
                           Icons.camera_alt_rounded,
                           size: 32,
-                          color: AppColor.themeTextColor,
+                          color: Colors.white,
                         ),
                       )),
                   InkWell(
                     onTap: _pickImageFromGallery,
                     child: Container(
                       height: 50,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 14, vertical: 1),
-                      margin: const EdgeInsets.symmetric(
-                          horizontal: 3, vertical: 8),
+                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 1),
+                      margin: const EdgeInsets.symmetric(horizontal: 3, vertical: 8),
                       alignment: Alignment.center,
                       decoration: const BoxDecoration(
-                        color: AppColor.themeColor,
+                        color: Colors.deepOrange,
                         borderRadius: BorderRadius.all(Radius.circular(8)),
                       ),
                       child: const Text(
                         "Pick image from gallery",
                         style: TextStyle(
-                            color: AppColor.themeTextColor,
+                            color: Colors.white,
                             fontFamily: "Poppins",
                             fontWeight: FontWeight.bold,
                             fontSize: 18),
                       ),
                     ),
-                  )
+                  ),
                 ],
               ),
               const SizedBox(height: 10),
               viewModel.isLoading
                   ? const CircularProgressIndicator()
                   : InkWell(
-                      onTap: () => _generateVideo(context),
-                      child: Container(
-                        height: 50,
-                        width: 307,
-                        padding: const EdgeInsets.all(4),
-                        margin: const EdgeInsets.symmetric(vertical: 8),
-                        alignment: Alignment.center,
-                        decoration: const BoxDecoration(
-                          color: AppColor.themeColor,
-                          borderRadius: BorderRadius.all(Radius.circular(8)),
-                        ),
-                        child: const Text(
-                          "Generate Video",
-                          style: TextStyle(
-                              color: AppColor.themeTextColor,
-                              fontFamily: "Poppins",
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18),
-                        ),
-                      ),
-                    )
+                onTap: () => _generateVideo(context),
+                child: Container(
+                  height: 50,
+                  width: 307,
+                  padding: const EdgeInsets.all(4),
+                  margin: const EdgeInsets.symmetric(vertical: 8),
+                  alignment: Alignment.center,
+                  decoration: const BoxDecoration(
+                    color: Colors.deepOrange,
+                    borderRadius: BorderRadius.all(Radius.circular(8)),
+                  ),
+                  child: const Text(
+                    "Generate Video",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontFamily: "Poppins",
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18),
+                  ),
+                ),
+              )
             ],
           ),
         ),
