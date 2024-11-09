@@ -6,7 +6,8 @@ class VideoResultScreen extends StatefulWidget {
   final File videoFile;
   final String videoId;
 
-  const VideoResultScreen({super.key, required this.videoFile, required this.videoId});
+  const VideoResultScreen(
+      {super.key, required this.videoFile, required this.videoId});
 
   @override
   _VideoResultScreenState createState() => _VideoResultScreenState();
@@ -40,29 +41,44 @@ class _VideoResultScreenState extends State<VideoResultScreen> {
             const SizedBox(height: 20),
             _controller.value.isInitialized
                 ? Column(
-              children: [
-                AspectRatio(
-                  aspectRatio: _controller.value.aspectRatio,
-                  child: VideoPlayer(_controller),
-                ),
-                IconButton(
-                  icon: Icon(
-                    _isPlaying ? Icons.pause : Icons.play_arrow,
-                    size: 50,
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      if (_isPlaying) {
-                        _controller.pause();
-                      } else {
-                        _controller.play();
-                      }
-                      _isPlaying = !_isPlaying;
-                    });
-                  },
-                ),
-              ],
-            )
+                    children: [
+                      AspectRatio(
+                        aspectRatio: _controller.value.aspectRatio,
+                        child: VideoPlayer(_controller),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          setState(() {
+                            if (_isPlaying) {
+                              _controller.pause();
+                            } else {
+                              _controller.play();
+                            }
+                            _isPlaying = !_isPlaying;
+                          });
+                        },
+                        child: Container(
+                          height: 50,
+                          width: 307,
+                          padding: const EdgeInsets.all(4),
+                          margin: const EdgeInsets.symmetric(vertical: 8),
+                          alignment: Alignment.center,
+                          decoration: const BoxDecoration(
+                            color: Colors.deepOrange,
+                            borderRadius: BorderRadius.all(Radius.circular(8)),
+                          ),
+                          child: const Text(
+                            "Download Video",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: "Poppins",
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18),
+                          ),
+                        ),
+                      )
+                    ],
+                  )
                 : const CircularProgressIndicator(),
           ],
         ),
